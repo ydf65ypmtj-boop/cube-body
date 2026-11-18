@@ -69,9 +69,12 @@ def run(cmd, timeout=60, env=None):
 
 def ensure_desktop() -> None:
     """Xvfb :99 が応答しなければ start_body.sh で起動する (冪等)。"""
-    p = run(["xdotool", "getdisplaygeometry"], timeout=10)
-    if p.returncode == 0:
-        return
+    try:
+        p = run(["xdotool", "getdisplaygeometry"], timeout=10)
+        if p.returncode == 0:
+            return
+    except FileNotFoundError:
+        pass  # xdotool 自体が無い環境では start_body.sh が依存ごと入れる
     start = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                          "start_body.sh")
     subprocess.run(["bash", start], capture_output=True, text=True,
