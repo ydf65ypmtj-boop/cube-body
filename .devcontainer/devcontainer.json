@@ -1,0 +1,1 @@
+{"name":"cube-body","postStartCommand":"bash .devcontainer/start-tailscale.sh"}
